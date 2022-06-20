@@ -6,8 +6,9 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
+	"context"
 
-	"github.com/Sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 	"github.com/alfredxiao/kubernetes-demo-controller/pkg/handlers"
 	"github.com/alfredxiao/kubernetes-demo-controller/pkg/utils"
 
@@ -52,13 +53,14 @@ func Start() {
 		kubeClient = utils.GetClient()
 	}
 
+	ctx := context.Background()
 	informer := cache.NewSharedIndexInformer(
 		&cache.ListWatch{
 			ListFunc: func(options meta_v1.ListOptions) (runtime.Object, error) {
-				return kubeClient.CoreV1().Pods(meta_v1.NamespaceAll).List(options)
+				return kubeClient.CoreV1().Pods(meta_v1.NamespaceAll).List(ctx, options)
 			},
 			WatchFunc: func(options meta_v1.ListOptions) (watch.Interface, error) {
-				return kubeClient.CoreV1().Pods(meta_v1.NamespaceAll).Watch(options)
+				return kubeClient.CoreV1().Pods(meta_v1.NamespaceAll).Watch(ctx, options)
 			},
 		},
 		&api_v1.Pod{},
