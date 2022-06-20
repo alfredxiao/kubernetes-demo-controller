@@ -196,7 +196,7 @@ func (c *Controller) processItem(newEvent Event) error {
 	case "update":
 		eventHandler.ObjectUpdated(obj, newEvent)
 	case "delete":
-		eventHandler.ObjectDeleted(newEvent)
+		eventHandler.ObjectDeleted(obj)
 	}
 	return nil
 }
